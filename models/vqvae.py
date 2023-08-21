@@ -2,10 +2,12 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from models.encoder import Encoder
-from models.quantizer import VectorQuantizer
-from models.decoder import Decoder
+from .encoder import Encoder
+from .quantizer import VectorQuantizer
+from .decoder import Decoder
 
+
+first = True
 
 class VQVAE(nn.Module):
     def __init__(self, h_dim, res_h_dim, n_res_layers,
@@ -35,10 +37,12 @@ class VQVAE(nn.Module):
             z_e)
         x_hat = self.decoder(z_q)
 
-        if verbose:
+        global first
+        if first:
+        
             print('original data shape:', x.shape)
             print('encoded data shape:', z_e.shape)
             print('recon data shape:', x_hat.shape)
-            assert False
+            first = False
 
         return embedding_loss, x_hat, perplexity
